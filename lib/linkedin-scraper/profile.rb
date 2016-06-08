@@ -286,13 +286,7 @@ module Linkedin
     end
 
     def http_client
-      @http_client ||= Mechanize.new do |agent|
-        agent.user_agent = Linkedin::UserAgent.randomize
-        if !@options.empty?
-          agent.set_proxy(@options[:proxy_ip], @options[:proxy_port], @options[:username], @options[:password])
-        end
-        agent.max_history = 0
-      end
+      @http_client ||= Mechanize.new
     end
 
     def get_linkedin_company_url(link)
