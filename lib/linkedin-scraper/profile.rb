@@ -100,7 +100,26 @@ module Linkedin
     end
     
     def education
-      @education ||= (@page.search('.pills .skill:not(.see-less)').map { |skill| skill.text.strip if skill.text } rescue nil)
+      @education ||= @page.search('.background-education').map do |item|
+        name = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
+        desc = item.search('h5').last.text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last
+        if item.search('h5').last.at('.degree')
+          degree = item.search('h5').last.at('.degree').text.gsub(/\s+|\n/, ' ').strip.gsub(/,$/, '')
+        end
+        major = item.search('h5').last.at('.major').text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last.at('.major')
+        period = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip if item.at('.education-date')
+        start_date, end_date = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip.split(' – ') rescue nil
+
+        {
+            name: name,
+            description: desc,
+            degree: degree,
+            major: major,
+            period: period,
+            start_date: start_date,
+            end_date: end_date
+        }
+      end
     end
 
     def websites
