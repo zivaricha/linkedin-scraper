@@ -16,7 +16,6 @@ module Linkedin
       projects
       linkedin_url
       education
-      bla
       groups
       websites
       languages
@@ -98,27 +97,6 @@ module Linkedin
 
     def current_companies
       @current_companies ||= get_companies.find_all { |c| c[:end_date] == 'Present' }
-    end
-    
-    def bla
-      @bla ||= @page.search('.background-education').map do |item|
-        name = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
-        desc = item.search('h5').last.text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last
-        degree = item.search("h5").last.at(".degree").text.gsub(/\s+|\n/, " ").strip.gsub(/,$/, "") if item.search("h5").last.at(".degree")
-        major = item.search('h5').last.at('.major').text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last.at('.major')
-        period = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip if item.at('.education-date')
-        start_date, end_date = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip.split(' – ') rescue nil
-
-        {
-            name: name,
-            description: desc,
-            degree: degree,
-            major: major,
-            period: period,
-            start_date: start_date,
-            end_date: end_date
-        }
-      end
     end
     
     def education
