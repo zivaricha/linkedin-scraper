@@ -100,7 +100,7 @@ module Linkedin
     end
     
     def education
-      @education ||= @page.search('.background-education').map do |item|
+      @education ||= @page.search('.background-section .background-education').map do |item|
         name = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
         desc = item.search('h5').last.text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last
         if item.search('h5').last.at('.degree')
