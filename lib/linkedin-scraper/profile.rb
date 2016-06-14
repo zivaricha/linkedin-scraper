@@ -120,7 +120,6 @@ module Linkedin
             end_date: end_date
         }
       end
-    end
 
     def websites
       @websites ||= @page.search('.websites li').flat_map do |site|
