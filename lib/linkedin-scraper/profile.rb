@@ -100,15 +100,15 @@ module Linkedin
     end
 
     def education
-      @education ||= @page.search('.schools .school').map do |item|
+      @education ||= @page.search('.background-education').map do |item|
         name = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
         desc = item.search('h5').last.text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last
         if item.search('h5').last.at('.degree')
           degree = item.search('h5').last.at('.degree').text.gsub(/\s+|\n/, ' ').strip.gsub(/,$/, '')
         end
         major = item.search('h5').last.at('.major').text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last.at('.major')
-        period = item.at('.date-range').text.gsub(/\s+|\n/, ' ').strip if item.at('.date-range')
-        start_date, end_date = item.at('.date-range').text.gsub(/\s+|\n/, ' ').strip.split(' – ') rescue nil
+        period = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip if item.at('.education-date')
+        start_date, end_date = item.at('.education-date').text.gsub(/\s+|\n/, ' ').strip.split(' – ') rescue nil
 
         {
             name: name,
