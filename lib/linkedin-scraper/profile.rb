@@ -16,6 +16,7 @@ module Linkedin
       projects
       linkedin_url
       education
+      experience
       groups
       websites
       languages
@@ -98,7 +99,24 @@ module Linkedin
     def current_companies
       @current_companies ||= get_companies.find_all { |c| c[:end_date] == 'Present' }
     end
+    
+    def experience
+      @experience ||= @page.search('.background-experience').map do |item|
+        title = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
+        company = item.search('h5').last.text.gsub(/\s+|\n/, ' ').strip if item.search('h5').last
+        period = item.at('..experience-date-locale').text.gsub(/\s+|\n/, ' ').strip if item.at('.experience-date-locale')
+        start_date, end_date = item.at('.experience-date-locale').text.gsub(/\s+|\n/, ' ').strip.split(' – ') rescue nil
 
+        {
+            title: title,
+            company: company,
+            period: period,
+            start_date: start_date,
+            end_date: end_date
+        }
+      end
+    end
+    
     def education
       @education ||= @page.search('.background-education').map do |item|
         name = item.at('h4').text.gsub(/\s+|\n/, ' ').strip if item.at('h4')
